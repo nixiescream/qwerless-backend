@@ -16,7 +16,12 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-    
+    const { id } = req.params;
+    Note.findById(id)
+    .then(note => {
+        res.json(note);
+    })
+    .catch(error => next(error));
 });
 
 router.post('/', (req, res, next) => {
@@ -37,6 +42,12 @@ router.put('/:id', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
+    const { id } = req.params;
+    Note.findByIdAndRemove(id)
+    .then(() => {
+        res.status(200).send();
+    })
+    .catch(error => next(error));
 
 });
 
