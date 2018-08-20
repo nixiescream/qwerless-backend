@@ -3,6 +3,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
+const upload = require('../configs/multer');
 
 const User = require('../models/user');
 
@@ -41,7 +42,7 @@ router.post('/login', (req, res, next) => {
         .catch(next);
 });
 
-router.post('/signup', (req, res, next) => {
+router.post('/signup', upload.single('file'), (req, res, next) => {
     if (req.session.currentUser) {
         return res.status(401).json({code: 'unauthorized'});
     }
@@ -66,7 +67,8 @@ router.post('/signup', (req, res, next) => {
             const newUser = User({
                 username,
                 email,
-                password: hashPass
+                password: hashPass,
+                image: `/uploads/${req.file.filename}`
             });
     
             return newUser.save()
