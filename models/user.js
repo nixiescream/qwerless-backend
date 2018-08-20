@@ -16,7 +16,8 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  picturePath: String
 }, {
   timestamps: true
 });
