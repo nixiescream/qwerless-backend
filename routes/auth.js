@@ -42,7 +42,7 @@ router.post('/login', (req, res, next) => {
         .catch(next);
 });
 
-router.post('/signup', upload.single('file'), (req, res, next) => {
+router.post('/signup', (req, res, next) => {
     if (req.session.currentUser) {
         return res.status(401).json({code: 'unauthorized'});
     }
@@ -50,6 +50,7 @@ router.post('/signup', upload.single('file'), (req, res, next) => {
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
+    const image = req.body.image;
   
     if (!username || !email || !password) {
         return res.status(422).json({code: 'validation'});
@@ -64,11 +65,12 @@ router.post('/signup', upload.single('file'), (req, res, next) => {
             const salt = bcrypt.genSaltSync(10);
             const hashPass = bcrypt.hashSync(password, salt);
     
+            console.log(image);
             const newUser = User({
                 username,
                 email,
                 password: hashPass,
-                image: `/uploads/${req.file.filename}`
+                image
             });
     
             return newUser.save()

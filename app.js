@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+require('dotenv').config()
 const cors = require('cors');
 
 const mongoose = require ('./database');
@@ -35,7 +36,7 @@ app.use(session({
 
 app.use(cors({
     credentials: true,
-    origin: ['http://localhost:4200']
+    origin: [process.env.CLIENT_URI, process.env.CLOUDINARY_URL]
 }));
 
 app.use('/api/auth', authRouter);
