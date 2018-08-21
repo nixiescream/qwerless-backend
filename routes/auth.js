@@ -3,7 +3,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
-const upload = require('../configs/multer');
 
 const User = require('../models/user');
 
