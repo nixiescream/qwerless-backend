@@ -26,19 +26,28 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
     const data = req.body;
-    const title = data[0];
-    const content = data.slice(1).join('\n');
+    const title = data[0][0];
+    const content = data[0].slice(1).join('\n');
     const owner = req.session.currentUser._id;
+    const rawStrokes = data[1];
+    const strokeGroups = data[2];
     Note.create({
         owner,
         title,
-        content
+        content,
+        rawStrokes,
+        strokeGroups
     });
     res.status(200).send();
 });
 
 router.put('/:id', (req, res, next) => {
-
+    const { id } = req.params;
+    Note.findByIdAndUpdate(id)
+    .then(() => {
+        res.status(200).send();
+    })
+    .catch(error => next(error));
 });
 
 router.delete('/:id', (req, res, next) => {
@@ -48,7 +57,6 @@ router.delete('/:id', (req, res, next) => {
         res.status(200).send();
     })
     .catch(error => next(error));
-
 });
 
 module.exports = router;

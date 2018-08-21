@@ -7,7 +7,9 @@ const ObjectId = Schema.Types.ObjectId;
 const noteSchema = new Schema({
     owner: { type: ObjectId, ref: 'User' },
     title: String,
-    content: String
+    content: String,
+    rawStrokes: [],
+    strokeGroups: []
     }, {
     timestamps: true
 });
