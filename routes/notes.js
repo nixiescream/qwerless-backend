@@ -43,7 +43,13 @@ router.post('/', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
     const { id } = req.params;
-    Note.findByIdAndUpdate(id)
+    const data = req.body;
+    const title = data[0][0];
+    const content = data[0].slice(1).join('\n');
+    const owner = req.session.currentUser._id;
+    const rawStrokes = data[1];
+    const strokeGroups = data[2];
+    Note.findByIdAndUpdate(id, {owner, title, content, rawStrokes, strokeGroups})
     .then(() => {
         res.status(200).send();
     })
