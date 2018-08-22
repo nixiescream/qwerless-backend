@@ -14,6 +14,8 @@ const authRouter = require('./routes/auth');
 const notesRouter = require('./routes/notes');
 
 const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -38,6 +40,32 @@ app.use(cors({
     credentials: true,
     origin: [process.env.CLIENT_URI, process.env.CLOUDINARY_URL]
 }));
+
+io.on('connection', (socket) => {
+
+    console.log('a user connected');
+
+    let noteRoom = '';
+
+    socket.join(noteRoom);
+
+    socket.on('session-change', (id) => {
+
+        console.log(`Connection to: ${id}`);
+
+        noteRoom = id; 
+        socket.join(id);
+        socket.broadcast.to(noteRoom).emit('request', socket.id);
+    });
+
+    socket.on('refresh', (strokes) => {
+        socket.broadcast.to(strokes.rid).emit('refresh', strokes.val);
+    });
+
+    socket.on('change', (strokes) => {
+        socket.broadcast.to(noteRoom).emit('change', strokes);
+    });
+});
 
 app.use('/api/auth', authRouter);
 app.use('/api/notes', notesRouter);
