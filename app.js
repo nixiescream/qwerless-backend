@@ -14,17 +14,21 @@ const authRouter = require('./routes/auth');
 const notesRouter = require('./routes/notes');
 
 const app = express.createServer(express.logger());
-const io = require('socket.io')(app);
+const server = express()
+  .use((req, res) => res.sendFile(INDEX) )
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+// const io = require('socket.io')(app);
+const io = socketIO(server);
 
-io.configure(function () {  
-    io.set("transports", ["xhr-polling"]); 
-    io.set("polling duration", 10); 
-});
+// io.configure(function () {  
+//     io.set("transports", ["xhr-polling"]); 
+//     io.set("polling duration", 10); 
+// });
 
-const port = process.env.PORT || 8080;
-app.listen(port, function() {  
-    console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-});
+// const port = process.env.PORT || 8080;
+// app.listen(port, function() {  
+//     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+// });
 
 
 app.use(logger('dev'));
