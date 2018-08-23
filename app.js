@@ -19,8 +19,8 @@ const io = require('socket.io')(server);
 // const io = socketIO(server);
 // io.set("origins", "*:*");
 
-const socket_port = process.env.PORT || 8080;
-server.listen(socket_port);
+// const socket_port = process.env.PORT || 8080;
+// server.listen(socket_port);
 
 // io.configure(function () {  
 //     io.set("transports", ["xhr-polling"]); 
