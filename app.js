@@ -13,8 +13,17 @@ const mongoose = require ('./database');
 const authRouter = require('./routes/auth');
 const notesRouter = require('./routes/notes');
 
-const app = express();
-// const io = require('socket.io')(80);
+const app = express.createServer(express.logger());
+const io = require('socket.io')(app);
+
+io.configure(function () {  
+    io.set("transports", ["xhr-polling"]); 
+    io.set("polling duration", 10); 
+});
+const port = process.env.PORT || 8080;
+app.listen(port, function() {  
+    console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+});
 
 
 app.use(logger('dev'));
@@ -51,13 +60,13 @@ app.use((req, res, next) => {
 });
 
 
-const server = app.listen(process.env.PORT || 8080);
-const io = require('socket.io').listen(server, {
-    log: false,
-    agent: false,
-    origins: '*:*',
-    transports: ['websocket', 'htmlfile', 'xhr-polling', 'jsonp-polling', 'polling']
-});
+// const server = app.listen(process.env.PORT || 8080);
+// const io = require('socket.io').listen(server, {
+//     log: false,
+//     agent: false,
+//     origins: '*:*',
+//     transports: ['websocket', 'htmlfile', 'xhr-polling', 'jsonp-polling', 'polling']
+// });
 
 io.on('connection', (socket) => {
 
