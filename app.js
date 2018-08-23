@@ -14,13 +14,6 @@ const authRouter = require('./routes/auth');
 const notesRouter = require('./routes/notes');
 
 const app = express();
-const server = app.listen(cross.NormalizePort(process.env.PORT || 8080));
-const io = require('socket.io').listen(server, {
-    log: false,
-    agent: false,
-    origins: '*:*',
-    transports: ['websocket', 'htmlfile', 'xhr-polling', 'jsonp-polling', 'polling']
-});
 // const io = require('socket.io')(80);
 
 
@@ -47,6 +40,14 @@ app.use(cors({
     credentials: true,
     origin: [process.env.CLIENT_URI, process.env.CLOUDINARY_URL]
 }));
+
+const server = app.listen(cross.NormalizePort(process.env.PORT || 8080));
+const io = require('socket.io').listen(server, {
+    log: false,
+    agent: false,
+    origins: '*:*',
+    transports: ['websocket', 'htmlfile', 'xhr-polling', 'jsonp-polling', 'polling']
+});
 
 io.on('connection', (socket) => {
 
