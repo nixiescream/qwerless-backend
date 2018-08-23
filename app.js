@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 });
 
 
-const server = app.listen(rocess.env.PORT || 8080);
+const server = app.listen(process.env.PORT || 8080);
 const io = require('socket.io').listen(server, {
     log: false,
     agent: false,
