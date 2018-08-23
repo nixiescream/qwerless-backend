@@ -37,6 +37,10 @@ app.use(session({
     }
 }));
 
+app.use(cors({
+    credentials: true,
+    origin: [process.env.CLIENT_URI, process.env.CLOUDINARY_URL]
+}));
 
 io.on('connection', (socket) => {
 
@@ -63,11 +67,6 @@ io.on('connection', (socket) => {
         socket.broadcast.to(noteRoom).emit('change', rawstrokes, strokeGroups);
     });
 });
-
-app.use(cors({
-    credentials: true,
-    origin: [process.env.CLIENT_URI, process.env.CLOUDINARY_URL]
-}));
 
 app.use('/api/auth', authRouter);
 app.use('/api/notes', notesRouter);
