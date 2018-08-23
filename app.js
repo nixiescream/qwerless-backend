@@ -57,14 +57,21 @@ app.use(cors({
     origin: [process.env.CLIENT_URI, process.env.CLOUDINARY_URL]
 }));
 
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//     res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-//     res.setHeader('Access-Control-Allow-Credentials', false);
-
-//     next();
-// });
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  
+   // Add this
+   if (req.method === 'OPTIONS') {
+  
+        res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, OPTIONS');
+        res.header('Access-Control-Max-Age', 120);
+        return res.status(200).json({});
+    }
+  
+    next();
+  
+  });
 
 
 // const server = app.listen(process.env.PORT || 8080);
