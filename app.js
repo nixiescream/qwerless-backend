@@ -14,11 +14,13 @@ const authRouter = require('./routes/auth');
 const notesRouter = require('./routes/notes');
 
 const app = express.createServer(express.logger());
-const server = express()
-  .use((req, res) => res.sendFile(INDEX) )
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
-// const io = require('socket.io')(app);
-const io = socketIO(server);
+const server = http.createServer(app);
+const io = require('socket.io')(server);
+// const io = socketIO(server);
+// io.set("origins", "*:*");
+
+const socket_port = process.env.PORT || 8080;
+server.listen(socket_port);
 
 // io.configure(function () {  
 //     io.set("transports", ["xhr-polling"]); 
