@@ -14,8 +14,8 @@ const authRouter = require('./routes/auth');
 const notesRouter = require('./routes/notes');
 
 const app = express();
-const io = require('socket.io')(process.env.PORT || 80);
-// const io = require('socket.io')(80);
+// const io = require('socket.io')(process.env.PORT || 80);
+const io = require('socket.io')(80);
 
 
 app.use(logger('dev'));
