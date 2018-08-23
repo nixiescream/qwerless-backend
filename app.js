@@ -14,7 +14,13 @@ const authRouter = require('./routes/auth');
 const notesRouter = require('./routes/notes');
 
 const app = express();
-const io = require('socket.io')(process.env.PORT || 8080);
+const server = app.listen(cross.NormalizePort(process.env.PORT || 8080));
+const io = require('socket.io').listen(server, {
+    log: false,
+    agent: false,
+    origins: '*:*',
+    transports: ['websocket', 'htmlfile', 'xhr-polling', 'jsonp-polling', 'polling']
+});
 // const io = require('socket.io')(80);
 
 
