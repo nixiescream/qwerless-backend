@@ -14,8 +14,8 @@ const authRouter = require('./routes/auth');
 const notesRouter = require('./routes/notes');
 
 const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(8080);
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -36,10 +36,6 @@ app.use(session({
     }
 }));
 
-app.use(cors({
-    credentials: true,
-    origin: [process.env.CLIENT_URI, process.env.CLOUDINARY_URL]
-}));
 
 io.on('connection', (socket) => {
 
@@ -59,13 +55,18 @@ io.on('connection', (socket) => {
     });
 
     socket.on('refresh', (strokes) => {
-        socket.broadcast.to(strokes.rid).emit('refresh', strokes.val);
+        socket.broadcast.to(strokes.rid).emit('refresh', { rawStrokes: strokes.rawStrokes, strokeGroups: strokes.strokeGroups});
     });
 
-    socket.on('change', (strokes) => {
-        socket.broadcast.to(noteRoom).emit('change', strokes);
+    socket.on('change', (rawstrokes, strokeGroups) => {
+        socket.broadcast.to(noteRoom).emit('change', rawstrokes, strokeGroups);
     });
 });
+
+app.use(cors({
+    credentials: true,
+    origin: [process.env.CLIENT_URI, process.env.CLOUDINARY_URL]
+}));
 
 app.use('/api/auth', authRouter);
 app.use('/api/notes', notesRouter);
